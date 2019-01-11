@@ -3,7 +3,7 @@
  * @Author: taowentao
  * @Date: 2019-01-06 17:36:56
  * @LastEditors: taowentao
- * @LastEditTime: 2019-01-06 17:58:43
+ * @LastEditTime: 2019-01-11 13:08:34
  */
 package main
 
@@ -11,6 +11,7 @@ import (
 	"client"
 	"fmt"
 	"net"
+	"tool"
 )
 
 /**
@@ -52,7 +53,7 @@ func data_connhandler(conn net.Conn) (err error) {
 		}
 
 		if clt == nil {
-			srcmac := GetSrcMac(data)      //源MAC
+			srcmac := tool.GetSrcMac(data) //源MAC
 			clt = client.GetClient(srcmac) //找到源客户端
 			if clt == nil {
 				clt = client.NewClient(srcmac, nil, conn)
@@ -62,9 +63,9 @@ func data_connhandler(conn net.Conn) (err error) {
 		}
 		clt.UpDate()
 
-		dstmac := GetDstMac(data) //目的MAC
+		dstmac := tool.GetDstMac(data) //目的MAC
 		// fmt.Println("srcmac:", srcmac, "dstmac", dstmac)
-		if ISBroadCastMac(dstmac) { //ARP
+		if tool.ISBroadCastMac(dstmac) { //ARP
 			client.BroadCast(data)
 			continue
 		}

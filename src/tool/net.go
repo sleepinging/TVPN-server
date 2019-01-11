@@ -1,4 +1,4 @@
-package main
+package tool
 
 import (
 	"net"
@@ -28,7 +28,9 @@ func ISBroadCastMac(mac net.HardwareAddr) (r bool) {
 }
 
 //是ARP
-func ISARP(date []byte) (r bool) {
-
+func ISARP(data []byte) (r bool) {
+	if data[12] == 0x08 && data[13] == 0x06 {
+		r = true
+	}
 	return
 }
