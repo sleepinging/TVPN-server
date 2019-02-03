@@ -1,3 +1,10 @@
+/*
+ * @Description: 网络相关的函数
+ * @Author: taowentao
+ * @Date: 2018-12-26 19:52:57
+ * @LastEditors: taowentao
+ * @LastEditTime: 2019-01-11 13:17:10
+ */
 package tool
 
 import (
@@ -24,13 +31,5 @@ func ISBroadCastMac(mac net.HardwareAddr) (r bool) {
 		}
 	}
 	r = true
-	return
-}
-
-//是ARP
-func ISARP(data []byte) (r bool) {
-	if data[12] == 0x08 && data[13] == 0x06 {
-		r = true
-	}
 	return
 }

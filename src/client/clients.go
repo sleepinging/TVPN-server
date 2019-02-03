@@ -42,7 +42,9 @@ func BroadCast(data []byte) {
 	// fmt.Println("broad cast")
 	clientmap.Range(func(k, v interface{}) bool {
 		c := v.(*Client)
-		c.Write(data)
+		if c.IsConn(1) { //已经建立数据连接
+			c.Write(data)
+		}
 		return true
 	})
 }

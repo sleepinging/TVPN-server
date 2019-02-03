@@ -3,7 +3,7 @@
  * @Author: taowentao
  * @Date: 2019-01-06 17:36:56
  * @LastEditors: taowentao
- * @LastEditTime: 2019-01-11 13:08:34
+ * @LastEditTime: 2019-02-03 14:33:26
  */
 package main
 
@@ -36,12 +36,17 @@ func data_connhandler(conn net.Conn) (err error) {
 		var n int
 		var err error
 		if clt != nil {
-			n, err = clt.Read(buf)
+			if clt.IsConn(1) {
+				n, err = clt.Read(buf)
+				if n <= 0 || err != nil {
+					clt.Offline()
+				}
+			}
 		} else {
 			n, err = conn.Read(buf)
 		}
 		if err != nil {
-			fmt.Println("read", err)
+			// fmt.Println("read err:", err)
 			break
 		}
 		data, ok := handle_recv_data(buf[:n])
@@ -52,22 +57,32 @@ func data_connhandler(conn net.Conn) (err error) {
 			continue
 		}
 
+		// var srcmac net.HardwareAddr //源MAC
 		if clt == nil {
+			// srcmac = tool.GetSrcMac(data)  //源MAC
 			srcmac := tool.GetSrcMac(data) //源MAC
 			clt = client.GetClient(srcmac) //找到源客户端
 			if clt == nil {
-				clt = client.NewClient(srcmac, nil, conn)
-				clt.Online()
+				continue
 				// client.PrintClientMap(-1)
 			}
+		}
+		if !clt.IsConn(1) {
+			fmt.Println("set data conn:", clt.Mac)
+			clt.SetConn(1, conn)
 		}
 		clt.UpDate()
 
 		dstmac := tool.GetDstMac(data) //目的MAC
-		// fmt.Println("srcmac:", srcmac, "dstmac", dstmac)
-		if tool.ISBroadCastMac(dstmac) { //ARP
+		// fmt.Println("srcmac:", clt.Mac, "dstmac", dstmac)
+		if tool.ISBroadCastMac(dstmac) { //广播
 			client.BroadCast(data)
 			continue
+		}
+		if tool.ISARP(data) {
+			// arp := tool.NewARP(data)
+
+			// pak := arp.ToBin()
 		}
 
 		dc := client.GetClient(dstmac) //找到目的客户端
@@ -75,10 +90,17 @@ func data_connhandler(conn net.Conn) (err error) {
 			// fmt.Println("no this client:", dstmac)
 			continue
 		}
+		if !dc.IsConn(1) {
+			// fmt.Println("this client not ready:", dstmac)
+			continue
+		}
 		n, err = dc.Write(data)
-		if err != nil {
-			fmt.Println("write", err)
+		if err != nil || n < 0 {
+			// fmt.Println("write err", err)
+			dc.Offline()
 			break
+		} else {
+			// fmt.Println("write ", n)
 		}
 	}
 
