@@ -3,7 +3,7 @@
  * @Author: taowentao
  * @Date: 2019-01-06 17:36:56
  * @LastEditors: taowentao
- * @LastEditTime: 2019-02-03 14:33:26
+ * @LastEditTime: 2019-02-03 16:57:07
  */
 package main
 
@@ -15,7 +15,7 @@ import (
 )
 
 /**
- * @description: 处理接收到的数据,解压|解密,加密|压缩
+ * @description: 处理接收到的数据,解压|解密
  * @param {type}
  * @return:
 	res:处理完的数据
@@ -23,6 +23,28 @@ import (
 */
 func handle_recv_data(data []byte) (res []byte, ok bool) {
 	res = data
+	// buff := bytes.NewReader(data)
+	// var err error
+	// res, _ = lzo.Decompress1X(buff, len(data), 20480)
+	// if err != nil {
+	// 	fmt.Println("Decompress1X ", err)
+	// }
+	// fmt.Println("Decompress1X ", len(data), "=>", len(res))
+	ok = true
+	return
+}
+
+/**
+ * @description: 处理接要发送的数据,加密|压缩
+ * @param {type}
+ * @return:
+	res:处理完的数据
+	ok:是否有效数据
+*/
+func handle_send_data(data []byte) (res []byte, ok bool) {
+	res = data
+	// res = lzo.Compress1X(data)
+	// fmt.Println("Compress1X ", len(data), "=>", len(res))
 	ok = true
 	return
 }
@@ -30,8 +52,8 @@ func handle_recv_data(data []byte) (res []byte, ok bool) {
 //处理某个客户端的连接
 func data_connhandler(conn net.Conn) (err error) {
 	// fmt.Println(string(data))
-	var clt *client.Client = nil
-	buf := make([]byte, 2048)
+	var clt *client.Client
+	buf := make([]byte, 20480)
 	for {
 		var n int
 		var err error
@@ -56,15 +78,16 @@ func data_connhandler(conn net.Conn) (err error) {
 		if len(data) < 14 {
 			continue
 		}
-
 		// var srcmac net.HardwareAddr //源MAC
 		if clt == nil {
 			// srcmac = tool.GetSrcMac(data)  //源MAC
 			srcmac := tool.GetSrcMac(data) //源MAC
+			// fmt.Println("srcmac:", srcmac)
 			clt = client.GetClient(srcmac) //找到源客户端
 			if clt == nil {
-				continue
+				// fmt.Println("no this src client:", srcmac)
 				// client.PrintClientMap(-1)
+				continue
 			}
 		}
 		if !clt.IsConn(1) {
@@ -94,6 +117,10 @@ func data_connhandler(conn net.Conn) (err error) {
 			// fmt.Println("this client not ready:", dstmac)
 			continue
 		}
+		data, ok = handle_send_data(data)
+		if !ok {
+			continue
+		}
 		n, err = dc.Write(data)
 		if err != nil || n < 0 {
 			// fmt.Println("write err", err)
@@ -121,7 +148,7 @@ func th_listen_data(port int) {
 			fmt.Printf("accept fail, err: %v\n", err)
 			continue
 		}
-		// fmt.Println("conn from:", conn)
+		fmt.Println("conn from:", conn.RemoteAddr().String())
 		go data_connhandler(conn)
 	}
 }

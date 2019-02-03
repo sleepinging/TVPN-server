@@ -3,7 +3,7 @@
  * @Author: taowentao
  * @Date: 2019-01-06 17:37:40
  * @LastEditors: taowentao
- * @LastEditTime: 2019-02-03 14:19:32
+ * @LastEditTime: 2019-02-03 16:08:05
  */
 package main
 
@@ -15,7 +15,7 @@ import (
 
 //处理某个客户端的连接
 func ctl_connhandler(conn net.Conn) (err error) {
-	var clt *client.Client = nil
+	var clt *client.Client
 	buf := make([]byte, 2048)
 	for {
 		var n int
@@ -34,13 +34,18 @@ func ctl_connhandler(conn net.Conn) (err error) {
 			// fmt.Println("read err:", err)
 			break
 		}
-		data, ok := handle_recv_data(buf[:n])
-		if !ok {
-			continue
-		}
+		data := buf[:n]
+		// data, ok := handle_recv_data(buf[:n])
+		// if !ok {
+		// 	continue
+		// }
 		// if len(data) < 14 {
 		// 	continue
 		// }
+		if len(data) < 1 {
+			fmt.Println("ctl data too short")
+			continue
+		}
 		switch data[0] {
 		case 1: //心跳
 			handle_heart_beat(clt, data[1:], conn)
@@ -55,6 +60,10 @@ func handle_heart_beat(clt *client.Client, macdata []byte, conn net.Conn) {
 	// fmt.Println("recv heart beat")
 	if clt == nil {
 		var srcmac net.HardwareAddr //源MAC
+		if len(macdata) < 6 {
+			fmt.Println("macdata too short")
+			return
+		}
 		srcmac = macdata[0:6]
 		clt = client.GetClient(srcmac) //找到源客户端
 		if clt == nil {
@@ -84,7 +93,7 @@ func th_listen_ctl(port int) {
 			fmt.Printf("accept fail, err: %v\n", err)
 			continue
 		}
-		// fmt.Println("conn from:", conn)
+		fmt.Println("conn from:", conn.RemoteAddr().String())
 		go ctl_connhandler(conn)
 	}
 }
