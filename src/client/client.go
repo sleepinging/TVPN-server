@@ -1,7 +1,7 @@
 package client
 
 import (
-	"fmt"
+	// "fmt"
 	"net"
 )
 
@@ -40,20 +40,6 @@ func NewClient(mac net.HardwareAddr, conn *net.UDPConn, addr *net.UDPAddr) (clie
 // 	}
 // 	return
 // }
-
-//上线，添加到map
-func (this *Client) Online() (r bool) {
-	clientmap.Store(this.Mac.String(), this)
-	fmt.Println(this.Mac, "online")
-	return
-}
-
-//下线，从map删除
-func (this *Client) Offline() (r bool) {
-	clientmap.Delete(this.Mac.String())
-	fmt.Println(this.Mac, "offline")
-	return
-}
 
 //写入
 func (this *Client) Write(data []byte) (n int, err error) {

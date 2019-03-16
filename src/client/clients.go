@@ -21,6 +21,20 @@ func PrintClientMap(max int) {
 	})
 }
 
+//上线，添加到map
+func (this *Client) Online() (r bool) {
+	clientmap.Store(this.Mac.String(), this)
+	fmt.Println(this.Mac, "online")
+	return
+}
+
+//下线，从map删除
+func (this *Client) Offline() (r bool) {
+	clientmap.Delete(this.Mac.String())
+	fmt.Println(this.Mac, "offline")
+	return
+}
+
 //获取客户端
 func GetClient(mac net.HardwareAddr) (c *Client) {
 	ic, ok := clientmap.Load(mac.String())

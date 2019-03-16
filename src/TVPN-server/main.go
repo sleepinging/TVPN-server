@@ -13,7 +13,7 @@ func main() {
 	// go view.StartHTTPServer(httpport)
 
 	fmt.Println("control port", ctlport)
-	// go th_listen_ctl(ctlport)
+	go th_listen_ctl(ctlport)
 
 	fmt.Println("data port", dataport)
 	th_listen_data(dataport)

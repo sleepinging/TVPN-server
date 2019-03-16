@@ -8,7 +8,7 @@ import (
 )
 
 //处理接收到的数据
-func datahandler(data []byte, conn *net.UDPConn, addr *net.UDPAddr) (err error) {
+func data_handler(data []byte, conn *net.UDPConn, addr *net.UDPAddr) (err error) {
 	// fmt.Println(string(data))
 	if len(data) < 14 {
 		return
@@ -58,7 +58,7 @@ func th_listen_data(port int) {
 			continue
 		}
 		// fmt.Println("read from:", addr)
-		datahandler(data[:n], conn, addr)
+		data_handler(data[:n], conn, addr)
 	}
 
 }
