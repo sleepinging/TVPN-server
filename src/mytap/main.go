@@ -4,28 +4,36 @@ import (
 	"client"
 	"fmt"
 	"net"
+	"tool"
 )
 
 //处理接收到的数据
 func datahandler(data []byte, conn *net.UDPConn, addr *net.UDPAddr) (err error) {
-	fmt.Println(string(data))
+	// fmt.Println(string(data))
 	if len(data) < 14 {
 		return
 	}
 	c := client.Client{
-		Mac:  GetSrcMac(data),
+		Mac:  tool.GetSrcMac(data),
 		Conn: conn,
 		Addr: addr,
 	}
+
 	if client.GetClient(c.Mac) == nil {
 		c.Online()
+		fmt.Println(c.Mac.String(), "online")
 	}
-	dstmac := GetDstMac(data) //找到目的客户端
+
+	dstmac := tool.GetDstMac(data) //找到目的客户端
+	if tool.ISBroadCastMac(dstmac) {
+		client.BroadCast(data)
+	}
+
 	dc := client.GetClient(dstmac)
 	if dc == nil {
 		return
 	}
-	// dc.Addr.
+	dc.Write(data)
 
 	return
 }
@@ -45,7 +53,7 @@ func th_listen() {
 			fmt.Println(err)
 			continue
 		}
-		fmt.Println("read from:", addr)
+		// fmt.Println("read from:", addr)
 		datahandler(data[:n], conn, addr)
 	}
 
