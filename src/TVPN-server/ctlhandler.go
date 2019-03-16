@@ -3,7 +3,7 @@
  * @Author: taowentao
  * @Date: 2019-01-06 17:37:40
  * @LastEditors: taowentao
- * @LastEditTime: 2019-03-16 17:15:19
+ * @LastEditTime: 2019-03-16 18:35:18
  */
 package main
 
@@ -46,6 +46,8 @@ func login_handler(data []byte, conn *net.UDPConn, addr *net.UDPAddr) (err error
 	//检查IP和MAC
 	ip = ip
 	mac = mac
+	//先把原来的下线
+	client.Offline(mac)
 	if client.Allow_online(mac, ip) {
 		fmt.Println(mac.String(), "allow online")
 	}

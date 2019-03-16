@@ -3,7 +3,7 @@
  * @Author: taowentao
  * @Date: 2018-12-26 19:52:57
  * @LastEditors: taowentao
- * @LastEditTime: 2019-01-11 13:17:10
+ * @LastEditTime: 2019-03-16 18:29:39
  */
 package tool
 
@@ -31,5 +31,27 @@ func ISBroadCastMac(mac net.HardwareAddr) (r bool) {
 		}
 	}
 	r = true
+	return
+}
+
+//把MAC转int64
+func MAC2I64(mac net.HardwareAddr) (v int64) {
+	for i := 0; i < 5; i++ {
+		v |= int64(mac[i])
+		v <<= 8
+	}
+	v |= int64(mac[5])
+	return
+}
+
+//把int64转MAC
+func I642MAC(v int64) (mac net.HardwareAddr) {
+	mac = make([]byte, 6)
+	mac[5] = byte(v & 0x00000000000000ff)
+	mac[4] = byte((v >> 8) & 0x00000000000000ff)
+	mac[3] = byte((v >> 16) & 0x00000000000000ff)
+	mac[2] = byte((v >> 24) & 0x00000000000000ff)
+	mac[1] = byte((v >> 32) & 0x00000000000000ff)
+	mac[0] = byte((v >> 40) & 0x00000000000000ff)
 	return
 }

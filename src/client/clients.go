@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net"
 	"sync"
+	"tool"
 )
 
 //在线客户端map,mac[*client]
@@ -16,33 +17,39 @@ func PrintClientMap(max int) {
 		if max == -1 {
 			return false
 		}
-		fmt.Printf("mac:%+v,client:%+v\n", k.(string), v.(*Client))
+		fmt.Printf("mac:%+v,client:%+v\n", tool.I642MAC(k.(int64)), v.(*Client))
 		return true
 	})
 }
 
 //上线，添加到map
 func (this *Client) Online() (r bool) {
-	clientmap.Store(this.Mac.String(), this)
-	fmt.Println(this.Mac, "online")
-	return
+	clientmap.Store(tool.MAC2I64(this.Mac), this)
+	// fmt.Println(this.Mac, "online")
+	return true
 }
 
 //下线，从map删除
 func (this *Client) Offline() (r bool) {
-	clientmap.Delete(this.Mac.String())
-	fmt.Println(this.Mac, "offline")
-	return
+	clientmap.Delete(tool.MAC2I64(this.Mac))
+	// fmt.Println(this.Mac, "offline")
+	return true
 }
 
 //获取客户端
 func GetClient(mac net.HardwareAddr) (c *Client) {
-	ic, ok := clientmap.Load(mac.String())
+	ic, ok := clientmap.Load(tool.MAC2I64(mac))
 	if !ok {
 		return
 	}
 	c = ic.(*Client)
 	return
+}
+
+//下线，从map删除
+func Offline(mac net.HardwareAddr) (r bool) {
+	clientmap.Delete(tool.MAC2I64(mac))
+	return true
 }
 
 //广播

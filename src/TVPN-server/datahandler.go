@@ -22,7 +22,7 @@ func data_handler(data []byte, conn *net.UDPConn, addr *net.UDPAddr) (err error)
 	if client.GetClient(c.Mac) == nil {
 		if client.IsAllow_online(c.Mac) {
 			c.Online()
-			// fmt.Println(c.Mac.String(), "allow online")
+			fmt.Println(c.Mac.String(), "Online")
 			client.PrintClientMap(-1)
 		} else {
 			fmt.Println(c.Mac.String(), "not allow online")
