@@ -13,11 +13,11 @@ func datahandler(data []byte, conn *net.UDPConn, addr *net.UDPAddr) (err error) 
 	if len(data) < 14 {
 		return
 	}
-	c := client.Client{
-		Mac:  tool.GetSrcMac(data),
-		Conn: conn,
-		Addr: addr,
-	}
+	c := client.NewClient(
+		tool.GetSrcMac(data),
+		conn,
+		addr,
+	)
 
 	if client.GetClient(c.Mac) == nil {
 		c.Online()
@@ -33,14 +33,18 @@ func datahandler(data []byte, conn *net.UDPConn, addr *net.UDPAddr) (err error) 
 	if dc == nil {
 		return
 	}
-	dc.Write(data)
+	n, err := dc.Write(data)
+	if err != nil || n < 0 {
+		dc.Offline()
+		fmt.Println(c.Mac.String(), "offline")
+	}
 
 	return
 }
 
 //监听端口数据协程
-func th_listen() {
-	conn, err := net.ListenUDP("udp", &net.UDPAddr{IP: net.ParseIP("0.0.0.0"), Port: 6543})
+func th_listen_data(port int) {
+	conn, err := net.ListenUDP("udp", &net.UDPAddr{IP: net.ParseIP("0.0.0.0"), Port: port})
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -57,9 +61,4 @@ func th_listen() {
 		datahandler(data[:n], conn, addr)
 	}
 
-}
-
-func main() {
-	fmt.Println("开始...")
-	th_listen()
 }
