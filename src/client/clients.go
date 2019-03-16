@@ -16,7 +16,7 @@ func PrintClientMap(max int) {
 		if max == -1 {
 			return false
 		}
-		fmt.Printf("mac:%+v,client:%+v\n", k.(net.HardwareAddr), v.(*Client))
+		fmt.Printf("mac:%+v,client:%+v\n", k.(string), v.(*Client))
 		return true
 	})
 }
