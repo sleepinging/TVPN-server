@@ -23,7 +23,7 @@ func data_handler(data []byte, conn *net.UDPConn, addr *net.UDPAddr) (err error)
 		if client.IsAllow_online(c.Mac) {
 			c.Online()
 			fmt.Println(c.Mac.String(), "Online")
-			client.PrintClientMap(-1)
+			// client.PrintClientMap(-1)
 		} else {
 			fmt.Println(c.Mac.String(), "not allow online")
 		}
@@ -56,7 +56,7 @@ func th_listen_data(port int) {
 		return
 	}
 	defer conn.Close()
-	data := make([]byte, 2048)
+	data := make([]byte, 65535)
 	for {
 		n, addr, err := conn.ReadFromUDP(data)
 		if err != nil {
