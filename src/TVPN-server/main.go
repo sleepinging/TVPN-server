@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"view"
 )
 
 func main() {
@@ -10,7 +11,7 @@ func main() {
 	httpport := 6580
 
 	fmt.Println("http port", httpport)
-	// go view.StartHTTPServer(httpport)
+	go view.StartHTTPServer(httpport)
 
 	fmt.Println("control port", ctlport)
 	go th_listen_ctl(ctlport)

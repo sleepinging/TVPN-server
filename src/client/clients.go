@@ -10,6 +10,21 @@ import (
 //在线客户端map,mac[*client]
 var clientmap = sync.Map{}
 
+//获取全部用户,最大条数
+func GetAllClient(max int) (clients []*Client) {
+	clients = make([]*Client, 0, max)
+	i := 0
+	clientmap.Range(func(k, v interface{}) bool {
+		if i >= max {
+			return false
+		}
+		clients = append(clients, v.(*Client))
+		i++
+		return true
+	})
+	return
+}
+
 //打印map,调试时用,最大条数-1无限制
 func PrintClientMap(max int) {
 	clientmap.Range(func(k, v interface{}) bool {

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="js/vue.js"></script>
+        <script src="js/axios.min.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            {{ message }}
+            <button @click="test">fxxk</button>
+        </div>
+    </body>
+    <script>
+        var app = new Vue({
+                el: '#app',
+                data: {
+                    message: 'Hello Vue!'
+                },
+                methods: {
+                    test:function(event){
+                        axios
+                            .get('/getonline')
+                            .then(response => (this.message = response.data))
+                    }
+                },
+            })
+    </script>
+</html>
+
+
