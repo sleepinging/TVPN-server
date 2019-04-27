@@ -6,22 +6,31 @@
     </head>
     <body>
         <div id="app">
+            <button @click="getonline">获取在线用户</button>
+            <button @click="adduser">添加用户</button>
+            <br>
             {{ message }}
-            <button @click="test">fxxk</button>
         </div>
     </body>
     <script>
         var app = new Vue({
                 el: '#app',
                 data: {
-                    message: 'Hello Vue!'
+                    message: '你好!'
                 },
                 methods: {
-                    test:function(event){
+                    getonline:function(event){
                         axios
-                            .get('/getonline')
-                            .then(response => (this.message = response.data))
-                    }
+                            // .post('/getonline',"num=1")
+                            .get("/getonline?num=1")
+                            .then(response => (
+                                this.message = response.data
+                            ))
+                    },
+                    adduser: function (event) {
+                        // this.message="<input type='text'></input>"
+                        window.location="adduser.html";
+                    },
                 },
             })
     </script>

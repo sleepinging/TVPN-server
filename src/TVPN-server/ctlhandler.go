@@ -3,13 +3,15 @@
  * @Author: taowentao
  * @Date: 2019-01-06 17:37:40
  * @LastEditors: taowentao
- * @LastEditTime: 2019-03-16 18:35:18
+ * @LastEditTime: 2019-04-27 20:16:01
  */
 package main
 
 import (
+	"encoding/binary"
 	"fmt"
 	"net"
+	"time"
 
 	"client"
 )
@@ -35,21 +37,34 @@ func ctl_handler(data []byte, conn *net.UDPConn, addr *net.UDPAddr) (err error) 
 func login_handler(data []byte, conn *net.UDPConn, addr *net.UDPAddr) (err error) {
 	// fmt.Println("recv login ...")
 	//MAC IP KEY
-	if len(data) != 42 { //长度不对
+	if len(data) < 15 { //长度不对
 		return
 	}
-	var mac net.HardwareAddr = data[0:6]
-	var ip net.IP = data[6:10]
-	key := data[11:43]
-	//检查key
-	key = key
-	//检查IP和MAC
+	idx := 0
+	var mac net.HardwareAddr = data[idx : idx+6]
+	idx += 6
+	var ip net.IP = data[idx : idx+4]
+	idx += 4
+	l := binary.BigEndian.Uint16(data[idx:])
+	idx += 2
+	name := string(data[idx : idx+int(l)])
+	idx += int(l)
+	l = binary.BigEndian.Uint16(data[idx:])
+	idx += 2
+	pwd := string(data[idx : idx+int(l)])
+	idx += int(l)
+	// fmt.Println(string(name), string(pwd))
+	pwd = pwd
+	// key := data[11:43]
+	// //检查key
+	// key = key
+	//TODO:检查IP和MAC
 	ip = ip
 	mac = mac
 	//先把原来的下线
 	client.Offline(mac)
 	if client.Allow_online(mac, ip) {
-		fmt.Println(mac.String(), "allow online")
+		fmt.Println(time.Now(), name, "allow online")
 	}
 	return
 }

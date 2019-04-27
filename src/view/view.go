@@ -2,13 +2,15 @@ package view
 
 import (
 	"client"
+	"encoding/json"
 	"fmt"
 	"net/http"
 )
 
 func OnlineHandler(w http.ResponseWriter, r *http.Request) {
-	_ = client.GetAllClient(10)
-	fmt.Fprintln(w, `{"name":"twt","ip":"192.168.1.1"}`)
+	cs := client.GetAllClient(10)
+	data, _ := json.Marshal(cs)
+	fmt.Fprintln(w, string(data))
 }
 
 func StartHTTPServer(port int) {
