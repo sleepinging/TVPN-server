@@ -3,7 +3,7 @@
  * @Author: taowentao
  * @Date: 2019-01-06 17:37:40
  * @LastEditors: taowentao
- * @LastEditTime: 2019-04-27 20:16:01
+ * @LastEditTime: 2019-04-27 20:22:50
  */
 package main
 
@@ -47,9 +47,15 @@ func login_handler(data []byte, conn *net.UDPConn, addr *net.UDPAddr) (err error
 	idx += 4
 	l := binary.BigEndian.Uint16(data[idx:])
 	idx += 2
+	if idx+int(l) > len(data) {
+		return
+	}
 	name := string(data[idx : idx+int(l)])
 	idx += int(l)
 	l = binary.BigEndian.Uint16(data[idx:])
+	if idx+int(l)+2 > len(data) {
+		return
+	}
 	idx += 2
 	pwd := string(data[idx : idx+int(l)])
 	idx += int(l)
@@ -65,6 +71,7 @@ func login_handler(data []byte, conn *net.UDPConn, addr *net.UDPAddr) (err error
 	client.Offline(mac)
 	if client.Allow_online(mac, ip) {
 		fmt.Println(time.Now(), name, "allow online")
+		conn.WriteToUDP([]byte{0x01}, addr)
 	}
 	return
 }
