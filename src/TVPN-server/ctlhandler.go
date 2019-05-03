@@ -3,7 +3,7 @@
  * @Author: taowentao
  * @Date: 2019-01-06 17:37:40
  * @LastEditors: taowentao
- * @LastEditTime: 2019-04-27 20:22:50
+ * @LastEditTime: 2019-05-03 17:35:08
  */
 package main
 
@@ -60,6 +60,7 @@ func login_handler(data []byte, conn *net.UDPConn, addr *net.UDPAddr) (err error
 	pwd := string(data[idx : idx+int(l)])
 	idx += int(l)
 	// fmt.Println(string(name), string(pwd))
+	//检查用户名和密码
 	pwd = pwd
 	// key := data[11:43]
 	// //检查key
@@ -71,6 +72,16 @@ func login_handler(data []byte, conn *net.UDPConn, addr *net.UDPAddr) (err error
 	client.Offline(mac)
 	if client.Allow_online(mac, ip) {
 		fmt.Println(time.Now(), name, "allow online")
+		c := client.OnlineClient{
+			Mac:     mac,
+			ConnCTL: conn,
+			AddrCTL: addr,
+			Info: &client.Client{
+				Name: name,
+			},
+			Onlinetime: time.Now(),
+		}
+		c.Online()
 		conn.WriteToUDP([]byte{0x01}, addr)
 	}
 	return

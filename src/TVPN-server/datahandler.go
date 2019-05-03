@@ -4,6 +4,7 @@ import (
 	"client"
 	"fmt"
 	"net"
+	"time"
 	"tool"
 )
 
@@ -13,29 +14,37 @@ func data_handler(data []byte, conn *net.UDPConn, addr *net.UDPAddr) (err error)
 	if len(data) < 14 {
 		return
 	}
-	c := client.NewClient(
-		tool.GetSrcMac(data),
-		conn,
-		addr,
-	)
-
-	if client.GetClient(c.Mac) == nil {
-		if client.IsAllow_online(c.Mac) {
-			c.Online()
-			fmt.Println(c.Mac.String(), "Online")
-			// client.PrintClientMap(-1)
-		} else {
-			fmt.Println(c.Mac.String(), "not allow online")
-		}
-
+	// c := client.NewOnlineClient(
+	// 	tool.GetSrcMac(data),
+	// 	conn,
+	// 	addr,
+	// )
+	c := client.GetOnlineClient(tool.GetSrcMac(data))
+	if c == nil {
+		return
 	}
+	c.Conn = conn
+	c.Addr = addr
+	c.Update = time.Now()
+
+	// if client.GetOnlineClient(c.Mac) == nil {
+	// 	if client.IsAllow_online(c.Mac) {
+	// 		c.Online()
+	// 		// c.Info=
+	// 		fmt.Println(c.Mac.String(), "Online")
+	// 		// client.PrintOnlineClientMap(-1)
+	// 	} else {
+	// 		fmt.Println(c.Mac.String(), "not allow online")
+	// 	}
+	// 	return
+	// }
 
 	dstmac := tool.GetDstMac(data) //找到目的客户端
 	if tool.ISBroadCastMac(dstmac) {
 		client.BroadCast(data)
 	}
 
-	dc := client.GetClient(dstmac)
+	dc := client.GetOnlineClient(dstmac)
 	if dc == nil {
 		return
 	}

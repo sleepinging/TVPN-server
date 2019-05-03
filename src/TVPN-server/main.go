@@ -1,7 +1,9 @@
 package main
 
 import (
+	"client"
 	"fmt"
+	"time"
 	"view"
 )
 
@@ -15,6 +17,9 @@ func main() {
 
 	fmt.Println("control port", ctlport)
 	go th_listen_ctl(ctlport)
+
+	//10分钟检查一次，5小时不不活跃下线
+	go client.Clean_Client(time.Second*60*10, time.Second*60*60*5)
 
 	fmt.Println("data port", dataport)
 	th_listen_data(dataport)
