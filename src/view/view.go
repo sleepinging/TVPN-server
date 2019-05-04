@@ -1,19 +1,29 @@
 package view
 
 import (
+	"client"
 	"fmt"
 	"net/http"
+	"strings"
 )
 
 //获取在线用户
 func GetOnlineUserHandler(w http.ResponseWriter, r *http.Request) {
-	// cs := client.GetAllClient(10)
+	cs := client.GetAllOnlineClient(10)
+	fmt.Println("get")
+	client.PrintOnlineClientMap(-1)
+	strs := make([]string, len(cs))
+	for i, v := range cs {
+		strs[i] = v.ToJson()
+	}
+	str := strings.Join(strs, ",")
+	str = "[" + str + "]"
 	// data, _ := json.Marshal(cs)
 	// fmt.Fprintln(w, string(data))
-	str := `[
-		{"Name":"twt","IP":"192.168.10.100","MAC":"00:02:03:04:05:07","OnlineTime":"2019-05-01 12:00:00"},
-		{"Name":"twt-centos","IP":"192.168.10.98","MAC":"00:02:03:04:09:08","OnlineTime":"2019-05-01 12:00:10"}
-	]`
+	// str := `[
+	// 	{"Name":"twt","IP":"192.168.10.100","MAC":"00:02:03:04:05:07","OnlineTime":"2019-05-01 12:00:00"},
+	// 	{"Name":"twt-centos","IP":"192.168.10.98","MAC":"00:02:03:04:09:08","OnlineTime":"2019-05-01 12:00:10"}
+	// ]`
 	fmt.Fprintln(w, str)
 }
 

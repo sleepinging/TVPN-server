@@ -69,11 +69,11 @@ func Offline(mac net.HardwareAddr) (r bool) {
 }
 
 //定期清除不活跃客户端
-func Clean_Client(dur,timeout time.Duration) {
+func Clean_Client(dur, timeout time.Duration) {
 	for {
 		clientmap.Range(func(k, v interface{}) bool {
-			c:=v.(*OnlineClient)
-			if c.Update.Add(timeout).Before(time.Now()){
+			c := v.(*OnlineClient)
+			if c.Update.Add(timeout).Before(time.Now()) {
 				clientmap.Delete(k)
 			}
 			return true

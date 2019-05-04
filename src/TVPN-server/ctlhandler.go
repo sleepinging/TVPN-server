@@ -3,7 +3,7 @@
  * @Author: taowentao
  * @Date: 2019-01-06 17:37:40
  * @LastEditors: taowentao
- * @LastEditTime: 2019-05-03 17:35:08
+ * @LastEditTime: 2019-05-04 19:19:50
  */
 package main
 
@@ -12,6 +12,7 @@ import (
 	"fmt"
 	"net"
 	"time"
+	"tool"
 
 	"client"
 )
@@ -69,18 +70,19 @@ func login_handler(data []byte, conn *net.UDPConn, addr *net.UDPAddr) (err error
 	ip = ip
 	mac = mac
 	//先把原来的下线
-	client.Offline(mac)
+	// client.Offline(mac)
 	if client.Allow_online(mac, ip) {
-		fmt.Println(time.Now(), name, "allow online")
 		c := client.OnlineClient{
-			Mac:     mac,
+			Mac:     tool.CopyMAC(mac),
 			ConnCTL: conn,
 			AddrCTL: addr,
 			Info: &client.Client{
 				Name: name,
 			},
+			IP:         tool.CopyIP(ip),
 			Onlinetime: time.Now(),
 		}
+		fmt.Println(c.ToJson(), "online")
 		c.Online()
 		conn.WriteToUDP([]byte{0x01}, addr)
 	}

@@ -3,7 +3,7 @@
  * @Author: taowentao
  * @Date: 2018-12-26 19:52:57
  * @LastEditors: taowentao
- * @LastEditTime: 2019-03-16 18:29:39
+ * @LastEditTime: 2019-05-04 19:19:08
  */
 package tool
 
@@ -54,4 +54,18 @@ func I642MAC(v int64) (mac net.HardwareAddr) {
 	mac[1] = byte((v >> 32) & 0x00000000000000ff)
 	mac[0] = byte((v >> 40) & 0x00000000000000ff)
 	return
+}
+
+//复制IP
+func CopyMAC(mac net.HardwareAddr) net.HardwareAddr {
+	dup := make(net.HardwareAddr, len(mac))
+	copy(dup, mac)
+	return dup
+}
+
+//复制MAC
+func CopyIP(ip net.IP) net.IP {
+	dup := make(net.IP, len(ip))
+	copy(dup, ip)
+	return dup
 }

@@ -2,6 +2,7 @@ package client
 
 import (
 	// "fmt"
+	"fmt"
 	"net"
 	"time"
 )
@@ -18,6 +19,8 @@ type OnlineClient struct {
 	ConnCTL *net.UDPConn //控制连接
 	AddrCTL *net.UDPAddr //控制地址
 
+	IP net.IP //使用的IP
+
 	Onlinetime time.Time //上线时间
 	Update     time.Time //活跃时间
 
@@ -33,26 +36,11 @@ func NewOnlineClient(mac net.HardwareAddr, conn *net.UDPConn, addr *net.UDPAddr)
 	return
 }
 
-// //设置连接,1为数据，2为控制
-// func (this *OnlineClient) SetConn(tp int, con net.Conn) {
-// 	switch tp {
-// 	case 1:
-// 		this.conn = con
-// 	case 2:
-// 		this.connctl = con
-// 	}
-// }
-
-// //是否连接,1为数据，2为控制
-// func (this *OnlineClient) IsConn(tp int) (r bool) {
-// 	switch tp {
-// 	case 1:
-// 		r = this.conn != nil
-// 	case 2:
-// 		r = this.connctl != nil
-// 	}
-// 	return
-// }
+//把一个用户转成json
+func (c *OnlineClient) ToJson() (str string) {
+	str = fmt.Sprintf(`{"Name":"%s","IP":"%s","MAC":"%s","OnlineTime":"%s"}`, c.Info.Name, c.IP.String(), c.Mac.String(), c.Onlinetime.Format("2006-01-02 15:04:05"))
+	return
+}
 
 //写入
 func (this *OnlineClient) Write(data []byte) (n int, err error) {
