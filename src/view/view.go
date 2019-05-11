@@ -10,7 +10,7 @@ import (
 //获取在线用户
 func GetOnlineUserHandler(w http.ResponseWriter, r *http.Request) {
 	cs := client.GetAllOnlineClient(10)
-	fmt.Println("get")
+	// fmt.Println("get")
 	client.PrintOnlineClientMap(-1)
 	strs := make([]string, len(cs))
 	for i, v := range cs {
@@ -52,8 +52,8 @@ func GetGroupHandler(w http.ResponseWriter, r *http.Request) {
 //获取权限数据
 func GetAccessHandler(w http.ResponseWriter, r *http.Request) {
 	str := `[
-		{"Name":"admin","Group1":"admin","Group2":"Boss","Rule":1},
-		{"Name":"test","Group1":"guest","Group2":"Boss","Rule":0}
+		{"Name":"admin","Group1":"admin","Group2":"Boss","Rule":"允许"},
+		{"Name":"test","Group1":"guest","Group2":"Boss","Rule":"拒绝"}
 	]`
 	fmt.Fprintln(w, str)
 }

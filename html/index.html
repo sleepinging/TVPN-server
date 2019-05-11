@@ -1,256 +1,146 @@
 <!DOCTYPE html>
 <html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>管理员 | 登录</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- Bootstrap 3.3.7 -->
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="css/AdminLTE.min.css">
+  <!-- iCheck -->
+  <link rel="stylesheet" href="css/blue.css">
+  
+  <!-- 弹出框css -->
+  <link rel="stylesheet" type="text/css" href="css/alert.css"/>
 
-    <head>
-        <script src="js/vue.js"></script>
-        <script src="js/axios.min.js"></script>
-        <link rel="stylesheet" href="css/index.css">
-        <script src="js/index.js"></script>
-    </head>
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
 
-    <body style="margin:0px;">
-        <div id="app" style="text-align:center;">
-            <el-container>
-                <el-header height="60px" style="background-color: #B3C0D1;text-align: center;line-height: 60px;">
-                    <span>VPN Admin</span>
-                </el-header>
+  <!-- Google Font -->
+  <!-- <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic"> -->
 
-                <el-main >
-                     <el-card :body-style="{ padding: '0px' }"
-                         style="width:70%;display: inline-block;margin-top: 100px;">
-                         <div slot="header">
-                             <span>在线用户</span>
-                         </div>
-                         <el-table :data="onlineUsers" border stripe size="medium">
-                             <el-table-column v-for="col in onlineUsersColumns" :prop="col.id" :key="col.id"
-                                 :label="col.label" align="center">
-                             </el-table-column>
-                         </el-table>
-                     </el-card>
+  <style>
+    .login-box{
+      margin: 0 auto;
+      padding-top: 7%;
+    }
+  </style>
+</head>
+<body class="hold-transition login-page">
+<div class="login-box">
+  <div class="login-logo">
+    <b>VPN</b>后台管理平台
+  </div>
+  <!-- /.login-logo -->
+  <div class="login-box-body">
+    <p class="login-box-msg">请登录</p>
 
-                     <el-card :body-style="{ padding: '0px' }"
-                         style="width:70%;display: inline-block;margin-top: 100px;">
-                         <div slot="header">
-                             <span>所有用户</span>
-                             <el-button type="text" @click="ReadyAddUser"
-                                 style="height:20px;display: inline; float:right;margin-right:10px;">添加</el-button>
-                         </div>
-                         <el-table :data="users" border stripe size="medium">
-                             <el-table-column v-for="col in usersColumns" :prop="col.id" :key="col.id"
-                                 :label="col.label" align="center">
-                             </el-table-column>
-                         </el-table>
-                     </el-card>
-
-                     <el-card :body-style="{ padding: '0px' }"
-                         style="width:70%;display: inline-block;margin-top: 100px;">
-                         <div slot="header">
-                             <span>权限种类</span>
-                         </div>
-                         <el-table :data="accesss" border stripe size="medium">
-                             <el-table-column v-for="col in accesssColumns" :prop="col.id" :key="col.id"
-                                 :label="col.label" align="center">
-                             </el-table-column>
-                         </el-table>
-                     </el-card>
-
-                     <el-card :body-style="{ padding: '0px' }"
-                         style="width:70%;display: inline-block;margin-top: 100px;">
-                         <div slot="header">
-                             <span>上网记录</span>
-                         </div>
-                         <el-table :data="records" border stripe size="medium">
-                             <el-table-column v-for="col in recordsColumns" :prop="col.id" :key="col.id"
-                                 :label="col.label" align="center">
-                             </el-table-column>
-                         </el-table>
-                     </el-card>
-                </el-main>
-
-            </el-container>
-
-
-            <el-dialog title="添加用户" :visible.sync="showAddUser" width="460px" :show-close="false"
-                :before-close="function(){}">
-                <el-form :model="user" ref="user" label-width="80px">
-                    <el-form-item label="用户名：">
-                        <el-input v-model="user.userName" placeholder="请输入用户名"></el-input>
-                    </el-form-item>
-                    <el-form-item label="密码： ">
-                        <el-input v-model="user.password" type="password" placeholder="请输入用户密码"></el-input>
-                    </el-form-item>
-                    <el-form-item label="用户组: ">
-                        <el-select v-model="user.group" placeholder="请选择用户组" style="width:340px;">
-                            <el-option v-for="(group,index) in groups" :key="index" :label="group.Name"
-                                :value="group.Name">
-                            </el-option>
-                        </el-select>
-
-                    </el-form-item>
-                    <el-form-item>
-                        <el-button type="primary">立即添加</el-button>
-                        <el-button @click="showAddUser=false">取消</el-button>
-                    </el-form-item>
-                </el-form>
-            </el-dialog>
-
+    <form action="javascript:void(0);" method="post">
+      <div class="form-group has-feedback">
+        <input type="text" id="username" class="form-control" placeholder="请输入账号">
+        <span class="glyphicon glyphicon-user form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+        <input type="password" id="password" class="form-control" placeholder="请输入密码">
+        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+      </div>
+      <div class="row">
+        <div class="col-xs-8">
         </div>
-    </body>
-    <script>
-        let host = "http://localhost:6580"
-        var app = new Vue({
-            el: '#app',
-            data: {
-                onlineUsers: [],
-                onlineUsersColumns: [{
-                        id: "Name",
-                        label: "用户名"
-                    },
-                    {
-                        id: "IP",
-                        label: "用户IP"
-                    },
-                    {
-                        id: "MAC",
-                        label: "Mac地址"
-                    },
-                    {
-                        id: "OnlineTime",
-                        label: "上线时间"
-                    }
-                ],
-                users: [],
-                usersColumns: [{
-                        id: "Name",
-                        label: "用户名"
-                    },
-                    {
-                        id: "Group",
-                        label: "用户组"
-                    }
-                ],
-                accesss: [],
-                accesssColumns: [{
-                        id: "Name",
-                        label: "名称"
-                    },
-                    {
-                        id: "Group1",
-                        label: "用户组1"
-                    },
-                    {
-                        id: "Group2",
-                        label: "用户组2"
-                    },
-                    {
-                        id: "Rule",
-                        label: "规则"
-                    }
-                ],
-                records: [],
-                recordsColumns: [{
-                        id: "Name",
-                        label: "用户名"
-                    },
-                    {
-                        id: "Online_Time",
-                        label: "上线时间"
-                    },
-                    {
-                        id: "Off_Time",
-                        label: "下线时间"
-                    },
-                    {
-                        id: "IP",
-                        label: "IP"
-                    },
-                    {
-                        id: "MAC",
-                        label: "MAC"
-                    },
-                    {
-                        id: "UP_Flow",
-                        label: "上传流量"
-                    },
-                    {
-                        id: "DOWN_Flow",
-                        label: "下载流量"
-                    }
-                ],
-                user: {
-                    userName: "",
-                    password: "",
-                    group: ""
-                },
-                groups: [
+        <!-- /.col -->
+        <div class="col-xs-4">
+          <button type="submit" class="btn btn-primary btn-block btn-flat signup">登录</button>
+        </div>
+        <!-- /.col -->
+      </div>
+    </form>
 
-                ],
-                showAddUser: false
-            },
-            mounted() {
-                this.$nextTick(_ => {
-                    this.GetOnlineUser()
-                    this.GetAllUser()
-                    this.GetAccess()
-                    this.GetRecord()
-                    this.GetGroup()
-                })
-            },
-            methods: {
-                getonline: function (event) {
-                    axios
-                        // .post('/getonline',"num=1")
-                        .get(host + "/getonlineuser")
-                        .then(response => {
-                            this.message = response.data
-                            console.log(this.message);
+  </div>
+  <!-- /.login-box-body -->
+</div>
+<!-- /.login-box -->
 
-                        })
-                },
-                ReadyAddUser: function () {
-                    this.showAddUser = true
-                },
-                AddUser() {
-
-                },
-                GetOnlineUser() {
-                    axios.get("/getonlineuser").then(res => {
-                        if (res.status == 200) {
-                            this.onlineUsers = res.data
-                        }
-                    })
-                },
-                GetAllUser() {
-                    axios.get("/getalluser").then(res => {
-                        if (res.status == 200) {
-                            this.users = res.data
-                        }
-                    })
-                },
-                GetGroup() {
-                    axios.get("/getgroup").then(res => {
-                        if (res.status == 200) {
-                            this.groups = res.data
-                        }
-                    })
-                },
-                GetAccess() {
-                    axios.get("/getaccess").then(res => {
-                        if (res.status == 200) {
-                            this.accesss = res.data
-                        }
-                    })
-                },
-                GetRecord() {
-                    axios.get("/getrecord").then(res => {
-                        if (res.status == 200) {
-                            this.records = res.data
-                        }
-                    })
-                }
-            },
+<!-- jQuery 3 -->
+<script src="js/jquery.min.js"></script>
+<!-- Bootstrap 3.3.7 -->
+<script src="js/bootstrap.min.js"></script>
+<!-- iCheck -->
+<script src="js/icheck.min.js"></script>
+<!-- session设置 -->
+<script src="js/jquery.session.js"></script>
+<!-- 弹出框js -->
+<script src="js/alert.js"></script>
+<script>
+  $(function () {
+    $('input').iCheck({
+      checkboxClass: 'icheckbox_square-blue',
+      radioClass: 'iradio_square-blue',
+      increaseArea: '20%' /* optional */
+    });
+    $(".signup").click(function(){
+      var username=$("#username").val()
+      var password=$("#password").val()
+      if (password=='admin'&&username=='admin') {
+        jqueryAlert({
+          'icon'    : 'static/img/right.png',
+          'content' : '操作成功',
+          'closeTime' : 2000,
         })
-
-    </script>
-
+        $.session.set('username','admin')
+        $(location).attr('href','main.html')
+        // $.ajax({
+        //   type:"POST",
+        //   url:'/login',
+        //   data: {
+        //     Email: username,
+        //     Password: password
+        //   },
+        //   success:function(jsonResult){
+        //     // console.log(jsonResult)
+        //     jqueryAlert({
+        //       'icon'    : 'static/img/right.png',
+        //       'content' : '操作成功',
+        //       'closeTime' : 2000,
+        //     })
+        //     $.session.set('username','admin')
+        //     $(location).attr('href','admin.html')
+        //     // history.go(0)
+        //   },
+        //   error:function(){
+        //     jqueryAlert({
+        //       'icon'    : 'static/img/error.png',
+        //       'content' : '网络出现问题了！',
+        //     })
+        //   }
+        // })
+      }else{
+        jqueryAlert({
+          'icon'    : 'static/img/error.png',
+          'content' : '账号或密码有误，请重新输入',
+        })
+      }
+      // if (username==password&&username=='admin') {
+      //   $.session.set('username','admin')
+      //   $(location).attr('href','admin.html')
+      // }else{
+      //   jqueryAlert({
+      //     'icon'    : 'static/img/error.png',
+      //     'content' : '账号或密码有误，请重新输入',
+      //   })
+      // }
+    })
+  });
+</script>
+</body>
 </html>
