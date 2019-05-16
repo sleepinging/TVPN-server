@@ -76,6 +76,40 @@ func StartHTTPServer(port int) {
 	http.HandleFunc("/getaccess", GetAccessHandler)
 	http.HandleFunc("/getrecord", GetRecordHandler)
 
+	//查看在线用户
+	http.HandleFunc("/onlineuser/get", GetRecordHandler)
+	//下线在线用户
+	http.HandleFunc("/onlineuser/offline", GetRecordHandler)
+	//增加用户
+	http.HandleFunc("/user/add", GetRecordHandler)
+	//删除用户
+	http.HandleFunc("/user/delete", GetRecordHandler)
+	//查询用户
+	http.HandleFunc("/user/get", GetRecordHandler)
+	//修改用户
+	http.HandleFunc("/user/edit", GetRecordHandler)
+
+	//增加用户组
+	http.HandleFunc("/group/add", GetRecordHandler)
+	//删除用户组
+	http.HandleFunc("/group/delete", GetRecordHandler)
+	//修改用户组
+	http.HandleFunc("/group/edit", GetRecordHandler)
+	//查询用户组
+	http.HandleFunc("/group/get", GetRecordHandler)
+
+	//增加用户组权限
+	http.HandleFunc("/access/add", GetRecordHandler)
+	//删除用户组权限
+	http.HandleFunc("/access/delete", GetRecordHandler)
+	//修改用户组权限
+	http.HandleFunc("/access/edit", GetRecordHandler)
+	//查询用户组权限
+	http.HandleFunc("/access/get", GetRecordHandler)
+
+	//查询记录
+	http.HandleFunc("/record/get", GetRecordHandler)
+
 	http.Handle("/", http.FileServer(http.Dir("html")))
 
 	err := http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
