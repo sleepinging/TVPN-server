@@ -1,3 +1,10 @@
 {
-    "go.gopath": "${workspaceFolder}"
+    "go.autocompleteUnimportedPackages": true,
+    "go.useCodeSnippetsOnFunctionSuggest": true,
+    "go.gopath": "${workspaceFolder}",
+    "go.useCodeSnippetsOnFunctionSuggestWithoutType": true,
+    "go.inferGopath": true,
+    "go.gotoSymbol.includeImports": true,
+    "go.gotoSymbol.includeGoroot": true,
+    "go.formatTool": "gofmt"
 }
