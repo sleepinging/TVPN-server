@@ -4,11 +4,16 @@ import (
 	"client"
 	"fmt"
 	"net/http"
+	"path"
+	"service"
 	"strings"
+
+	"config"
 )
 
 //获取在线用户
 func GetOnlineUserHandler(w http.ResponseWriter, r *http.Request) {
+	// uid := r.PostFormValue("uid")
 	cs := client.GetAllOnlineClient(10)
 	// fmt.Println("get")
 	client.PrintOnlineClientMap(-1)
@@ -42,9 +47,9 @@ func GetAllUserHandler(w http.ResponseWriter, r *http.Request) {
 //获取用户组
 func GetGroupHandler(w http.ResponseWriter, r *http.Request) {
 	str := `[
-		{"Name":"admin","Network":"192.168.10.1/24","MAC":"*","up_speed_limit":123,"down_speed_limt":1234,"def_visit":1,"def_visited":0},
-		{"Name":"Boss","Network":"192.168.10.2/24","MAC":"*","up_speed_limit":123,"down_speed_limt":1234,"def_visit":1,"def_visited":0},
-		{"Name":"guest","Network":"192.168.10.3/24","MAC":"*","up_speed_limit":123,"down_speed_limt":1234,"def_visit":0,"def_visited":1}
+		{"id":"1","Name":"admin","Network":"192.168.10.1/24","MAC":"*","up_speed_limit":123,"down_speed_limt":1234,"def_visit":1,"def_visited":0},
+		{"id":"2","Name":"Boss","Network":"192.168.10.2/24","MAC":"*","up_speed_limit":123,"down_speed_limt":1234,"def_visit":1,"def_visited":0},
+		{"id":"3","Name":"guest","Network":"192.168.10.3/24","MAC":"*","up_speed_limit":123,"down_speed_limt":1234,"def_visit":0,"def_visited":1}
 	]`
 	fmt.Fprintln(w, str)
 }
@@ -80,8 +85,9 @@ func StartHTTPServer(port int) {
 	http.HandleFunc("/onlineuser/get", GetRecordHandler)
 	//下线在线用户
 	http.HandleFunc("/onlineuser/offline", GetRecordHandler)
+
 	//增加用户
-	http.HandleFunc("/user/add", GetRecordHandler)
+	http.HandleFunc("/user/add", service.AddUser)
 	//删除用户
 	http.HandleFunc("/user/delete", GetRecordHandler)
 	//查询用户
@@ -110,7 +116,7 @@ func StartHTTPServer(port int) {
 	//查询记录
 	http.HandleFunc("/record/get", GetRecordHandler)
 
-	http.Handle("/", http.FileServer(http.Dir("html")))
+	http.Handle("/", http.FileServer(http.Dir(path.Join(config.WorkPath, "html"))))
 
 	err := http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
 	if err != nil {

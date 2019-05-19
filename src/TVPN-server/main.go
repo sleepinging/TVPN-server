@@ -5,7 +5,18 @@ import (
 	"fmt"
 	"time"
 	"view"
+
+	"dao"
+
+	_ "github.com/mattn/go-sqlite3"
 )
+
+func init() {
+	err := dao.InitDB()
+	if err != nil {
+		panic(err)
+	}
+}
 
 func main() {
 	ctlport := 6544

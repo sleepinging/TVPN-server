@@ -1,4 +1,4 @@
-package moudle
+package module
 
 type Group struct {
 }

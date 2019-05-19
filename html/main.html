@@ -90,7 +90,7 @@
 
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary">立即添加</el-button>
+                        <el-button type="primary" @click="AddUser">立即添加</el-button>
                         <el-button @click="showAddUser=false">取消</el-button>
                     </el-form-item>
                 </el-form>
@@ -99,7 +99,8 @@
         </div>
     </body>
     <script>
-        let host = "http://localhost:6580"
+        // let host = "http://localhost:6580"
+        let host = ""
         var app = new Vue({
             el: '#app',
             data: {
@@ -213,7 +214,19 @@
                     this.showAddUser = true
                 },
                 AddUser() {
+                    axios.post("/user/add",{
+                        "username":"twt",
+                        "pwd":"123456",
+                        "group":1,
 
+                    }).then(res => {
+                        if (res.status != 200) return;
+                        if(res.data.res!=0){
+                            alert(res.data.msg)
+                            return
+                        }
+                        alert("添加成功");
+                    })
                 },
                 GetOnlineUser() {
                     axios.get("/getonlineuser").then(res => {

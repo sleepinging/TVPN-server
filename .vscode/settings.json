@@ -6,5 +6,12 @@
     "go.inferGopath": true,
     "go.gotoSymbol.includeImports": true,
     "go.gotoSymbol.includeGoroot": true,
-    "go.formatTool": "gofmt"
+    "go.formatTool": "gofmt",
+    "go.buildFlags": [
+        "-o",
+        "${workspaceFolder}/tvpn-server.exe"
+    ],
+    "terminal.integrated.env.windows": {
+        "GOBIN":"${workspaceFolder}/bin",
+    },
 }
