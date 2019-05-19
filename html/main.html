@@ -236,7 +236,7 @@
                     })
                 },
                 GetAllUser() {
-                    axios.get("/getalluser").then(res => {
+                    axios.get("/user/get").then(res => {
                         if (res.status == 200) {
                             this.users = res.data
                         }

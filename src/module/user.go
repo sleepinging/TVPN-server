@@ -2,8 +2,8 @@ package module
 
 //User user
 type User struct {
-	Id       int
+	ID       int
 	Name     string
 	Password string
-	GroupId  int
+	GroupID  int
 }

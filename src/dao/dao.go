@@ -18,5 +18,17 @@ func InitDB() (err error) {
 	if err != nil {
 		return
 	}
+	err = initGroupDB()
+	if err != nil {
+		return
+	}
+	err = initRecordDB()
+	if err != nil {
+		return
+	}
+	err = initAccessDB()
+	if err != nil {
+		return
+	}
 	return
 }

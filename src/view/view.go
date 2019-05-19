@@ -91,7 +91,7 @@ func StartHTTPServer(port int) {
 	//删除用户
 	http.HandleFunc("/user/delete", GetRecordHandler)
 	//查询用户
-	http.HandleFunc("/user/get", GetRecordHandler)
+	http.HandleFunc("/user/get", service.GetUsers)
 	//修改用户
 	http.HandleFunc("/user/edit", GetRecordHandler)
 
