@@ -75,6 +75,7 @@ func Clean_Client(dur, timeout time.Duration) {
 			c := v.(*OnlineClient)
 			if c.Update.Add(timeout).Before(time.Now()) {
 				clientmap.Delete(k)
+				fmt.Println("offline timeout client:", tool.I642MAC(k.(int64)), v.(*OnlineClient))
 			}
 			return true
 		})
@@ -87,9 +88,7 @@ func BroadCast(data []byte) {
 	// fmt.Println("broad cast")
 	clientmap.Range(func(k, v interface{}) bool {
 		c := v.(*OnlineClient)
-		// if c.IsConn(1) { //已经建立数据连接
 		c.Write(data)
-		// }
 		return true
 	})
 }

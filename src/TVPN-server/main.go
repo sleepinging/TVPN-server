@@ -2,6 +2,7 @@ package main
 
 import (
 	"client"
+	"config"
 	"fmt"
 	"time"
 	"view"
@@ -23,6 +24,8 @@ func main() {
 	dataport := 6543
 	httpport := 6580
 
+	config.InitConfig()
+
 	fmt.Println("http port", httpport)
 	go view.StartHTTPServer(httpport)
 
@@ -31,6 +34,7 @@ func main() {
 
 	//10分钟检查一次，5小时不不活跃下线
 	go client.Clean_Client(time.Second*60*10, time.Second*60*60*5)
+	// go client.Clean_Client(time.Second*10, time.Second*60)
 
 	fmt.Println("data port", dataport)
 	th_listen_data(dataport)

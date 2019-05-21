@@ -2,6 +2,7 @@ package dao
 
 import (
 	"database/sql"
+	"fmt"
 	"module"
 )
 
@@ -35,7 +36,7 @@ func GetGroups() (groups []*module.Group) {
 
 //GetGroupByID get group by id
 func GetGroupByID(id int) (group *module.Group, err error) {
-	rows, err := db.Query("SELECT * FROM 'group'")
+	rows, err := db.Query("SELECT * FROM `group` where id = '" + fmt.Sprintf("%d", id) + "'")
 	if err != nil {
 		return
 	}

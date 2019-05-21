@@ -30,6 +30,9 @@ func CheckLogin(name, pwd string) (ok bool) {
 	if user == nil {
 		return
 	}
+	if user.Password != pwd {
+		return
+	}
 	ok = true
 	return
 }

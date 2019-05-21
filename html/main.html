@@ -51,7 +51,7 @@
                          </div>
                          <el-table :data="accesss" border stripe size="medium">
                              <el-table-column v-for="col in accesssColumns" :prop="col.id" :key="col.id"
-                                 :label="col.label" align="center">
+                                 :label="col.label" align="center" :formatter="format">
                              </el-table-column>
                          </el-table>
                      </el-card>
@@ -84,7 +84,7 @@
                     <el-form-item label="用户组: ">
                         <el-select v-model="user.group" placeholder="请选择用户组" style="width:340px;">
                             <el-option v-for="(group,index) in groups" :key="index" :label="group.Name"
-                                :value="group.Name">
+                                :value="group.id">
                             </el-option>
                         </el-select>
 
@@ -183,7 +183,7 @@
                 user: {
                     userName: "",
                     password: "",
-                    group: ""
+                    group: null
                 },
                 groups: [
 
@@ -214,10 +214,13 @@
                     this.showAddUser = true
                 },
                 AddUser() {
+                    let username = this.user.userName;
+                    let password = this.user.password;
+                    let groupid=this.user.group-0;
                     axios.post("/user/add",{
-                        "username":"twt",
-                        "pwd":"123456",
-                        "group":1,
+                        "username": username,
+                        "pwd": password,
+                        "group":groupid,
 
                     }).then(res => {
                         if (res.status != 200) return;
@@ -262,6 +265,14 @@
                             this.records = res.data
                         }
                     })
+                },
+                format(row, colum) {
+                    let prop = colum.property
+                    if(prop == 'Rule')
+                    {
+                        return row.Rule == '1' ? '允许':'拒绝'
+                    }
+                    return row[prop]
                 }
             },
         })

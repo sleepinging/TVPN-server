@@ -3,11 +3,12 @@
  * @Author: taowentao
  * @Date: 2019-01-06 17:37:40
  * @LastEditors: taowentao
- * @LastEditTime: 2019-05-04 19:19:50
+ * @LastEditTime: 2019-05-19 16:21:29
  */
 package main
 
 import (
+	"controller"
 	"encoding/binary"
 	"fmt"
 	"net"
@@ -62,7 +63,10 @@ func login_handler(data []byte, conn *net.UDPConn, addr *net.UDPAddr) (err error
 	idx += int(l)
 	// fmt.Println(string(name), string(pwd))
 	//检查用户名和密码
-	pwd = pwd
+	if !controller.CheckLogin(name, pwd) {
+		conn.WriteToUDP([]byte{0x00, 0x02}, addr)
+		return
+	}
 	// key := data[11:43]
 	// //检查key
 	// key = key
@@ -84,7 +88,7 @@ func login_handler(data []byte, conn *net.UDPConn, addr *net.UDPAddr) (err error
 		}
 		fmt.Println(c.ToJson(), "online")
 		c.Online()
-		conn.WriteToUDP([]byte{0x01}, addr)
+		conn.WriteToUDP([]byte{0x00, 0x01}, addr)
 	}
 	return
 }

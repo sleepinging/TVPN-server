@@ -16,7 +16,7 @@ func GetOnlineUserHandler(w http.ResponseWriter, r *http.Request) {
 	// uid := r.PostFormValue("uid")
 	cs := client.GetAllOnlineClient(10)
 	// fmt.Println("get")
-	client.PrintOnlineClientMap(-1)
+	// client.PrintOnlineClientMap(-1)
 	strs := make([]string, len(cs))
 	for i, v := range cs {
 		strs[i] = v.ToJson()
@@ -46,10 +46,13 @@ func GetAllUserHandler(w http.ResponseWriter, r *http.Request) {
 
 //获取用户组
 func GetGroupHandler(w http.ResponseWriter, r *http.Request) {
+	// str := `[
+	// 	{"id":"1","Name":"admin","Network":"192.168.10.1/24","MAC":"*","up_speed_limit":123,"down_speed_limt":1234,"def_visit":1,"def_visited":0},
+	// 	{"id":"2","Name":"Boss","Network":"192.168.10.2/24","MAC":"*","up_speed_limit":123,"down_speed_limt":1234,"def_visit":1,"def_visited":0},
+	// 	{"id":"3","Name":"guest","Network":"192.168.10.3/24","MAC":"*","up_speed_limit":123,"down_speed_limt":1234,"def_visit":0,"def_visited":1}
+	// ]`
 	str := `[
-		{"id":"1","Name":"admin","Network":"192.168.10.1/24","MAC":"*","up_speed_limit":123,"down_speed_limt":1234,"def_visit":1,"def_visited":0},
-		{"id":"2","Name":"Boss","Network":"192.168.10.2/24","MAC":"*","up_speed_limit":123,"down_speed_limt":1234,"def_visit":1,"def_visited":0},
-		{"id":"3","Name":"guest","Network":"192.168.10.3/24","MAC":"*","up_speed_limit":123,"down_speed_limt":1234,"def_visit":0,"def_visited":1}
+		{"id":"1","Name":"user","Network":"192.168.10.1/24","MAC":"*","up_speed_limit":123,"down_speed_limt":1234,"def_visit":1,"def_visited":0}
 	]`
 	fmt.Fprintln(w, str)
 }
@@ -57,8 +60,8 @@ func GetGroupHandler(w http.ResponseWriter, r *http.Request) {
 //获取权限数据
 func GetAccessHandler(w http.ResponseWriter, r *http.Request) {
 	str := `[
-		{"Name":"admin","Group1":"admin","Group2":"Boss","Rule":"允许"},
-		{"Name":"test","Group1":"guest","Group2":"Boss","Rule":"拒绝"}
+		{"Name":"admin","Group1":"admin","Group2":"Boss","Rule":"1"},
+		{"Name":"test","Group1":"guest","Group2":"Boss","Rule":"0"}
 	]`
 	fmt.Fprintln(w, str)
 }

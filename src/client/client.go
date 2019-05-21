@@ -44,6 +44,9 @@ func (c *OnlineClient) ToJson() (str string) {
 
 //写入
 func (this *OnlineClient) Write(data []byte) (n int, err error) {
+	if this.Conn == nil {
+		return
+	}
 	n, err = this.Conn.WriteToUDP(data, this.Addr)
 	// fmt.Println("write to ", this.Mac, n, "bytes")
 	return
@@ -51,16 +54,18 @@ func (this *OnlineClient) Write(data []byte) (n int, err error) {
 
 //读取
 func (this *OnlineClient) Read(buf []byte) (n int, err error) {
-	// fmt.Println(this.conn)
+	if this.Conn == nil {
+		return
+	}
 	n, this.Addr, err = this.Conn.ReadFromUDP(buf)
 	return
 }
 
-/**
- * @description: 更新时间
- * @param {type}
- * @return:
- */
-func (this *OnlineClient) UpDate() {
-	// this.uptime = time.Now()
-}
+// /**
+//  * @description: 更新时间
+//  * @param {type}
+//  * @return:
+//  */
+// func (this *OnlineClient) UpDate() {
+// 	this.Update = time.Now()
+// }
