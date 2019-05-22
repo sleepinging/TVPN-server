@@ -40,6 +40,7 @@ func GetGroupByID(id int) (group *module.Group, err error) {
 	if err != nil {
 		return
 	}
+	defer rows.Close()
 	for rows.Next() {
 		group = new(module.Group)
 		err = rows.Scan(&group.ID, &group.Name, &group.NetWork, &group.MAC, &group.UpSpeedLimit, &group.DownSpeedLimit, &group.DefVisit)

@@ -52,7 +52,8 @@ func GetGroupHandler(w http.ResponseWriter, r *http.Request) {
 	// 	{"id":"3","Name":"guest","Network":"192.168.10.3/24","MAC":"*","up_speed_limit":123,"down_speed_limt":1234,"def_visit":0,"def_visited":1}
 	// ]`
 	str := `[
-		{"id":"1","Name":"user","Network":"192.168.10.1/24","MAC":"*","up_speed_limit":123,"down_speed_limt":1234,"def_visit":1,"def_visited":0}
+		{"id":"1","Name":"user","Network":"192.168.10.1/24","MAC":"*","up_speed_limit":123,"down_speed_limt":1234,"def_visit":1,"def_visited":0},
+		{"id":"2","Name":"admin","Network":"192.168.10.2/24","MAC":"*","up_speed_limit":123,"down_speed_limt":1234,"def_visit":1,"def_visited":0}
 	]`
 	fmt.Fprintln(w, str)
 }
@@ -60,8 +61,7 @@ func GetGroupHandler(w http.ResponseWriter, r *http.Request) {
 //获取权限数据
 func GetAccessHandler(w http.ResponseWriter, r *http.Request) {
 	str := `[
-		{"Name":"admin","Group1":"admin","Group2":"Boss","Rule":"1"},
-		{"Name":"test","Group1":"guest","Group2":"Boss","Rule":"0"}
+		{"Name":"测试","Group1":"admin","Group2":"user","Rule":"1"}
 	]`
 	fmt.Fprintln(w, str)
 }

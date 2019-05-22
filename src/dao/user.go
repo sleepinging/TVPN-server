@@ -34,6 +34,7 @@ func GetUserByName(username string) (user *module.User, err error) {
 	if err != nil {
 		return
 	}
+	defer rows.Close()
 	for rows.Next() {
 		user = new(module.User)
 		err = rows.Scan(&user.ID, &user.Name, &user.Password, &user.GroupID)
@@ -48,6 +49,7 @@ func GetUsers() (users []*module.User, err error) {
 	if err != nil {
 		return
 	}
+	defer rows.Close()
 	for rows.Next() {
 		user := new(module.User)
 		err = rows.Scan(&user.ID, &user.Name, &user.Password, &user.GroupID)

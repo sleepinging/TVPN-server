@@ -217,6 +217,7 @@
                     let username = this.user.userName;
                     let password = this.user.password;
                     let groupid=this.user.group-0;
+                    let This = this
                     axios.post("/user/add",{
                         "username": username,
                         "pwd": password,
@@ -229,6 +230,8 @@
                             return
                         }
                         alert("添加成功");
+                        This.showAddUser = false;
+                        This.GetAllUser();
                     })
                 },
                 GetOnlineUser() {
